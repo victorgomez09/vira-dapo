@@ -9,6 +9,7 @@ import (
 
 type DB struct {
 	Db *sql.DB
+	Tx *sql.Tx
 }
 
 func (db *DB) InitDb() {

@@ -74,6 +74,14 @@ func (handler *ProjectHandler) Create(c echo.Context) error {
 		})
 	}
 
+	// TODO: create Postgresql schema
+	_, err = handler.Repository.Db.ExecContext(context.TODO(), "CREATE SCHEMA $1", project.Name)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, echo.Map{
+			"error": "Error creating schema",
+		})
+	}
+
 	row := handler.Repository.Db.QueryRowContext(context.TODO(), "SELECT * FROM projects WHERE name = $1", project.Name)
 	err = row.Scan(&project)
 	if err != nil {
